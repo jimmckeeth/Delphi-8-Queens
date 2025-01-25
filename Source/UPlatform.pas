@@ -18,7 +18,7 @@ interface
 
 uses
   // Delphi
-  Forms;
+  VCL.Forms;
 
 
 ///  <summary>Sets default font of given form and its contained controls to use

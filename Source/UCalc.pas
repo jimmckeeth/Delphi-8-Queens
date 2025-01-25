@@ -1,21 +1,17 @@
 {
  * Distributed under the MIT license.
- * See the accompanying LICENSE file or go to
- * http://delphidabbler.mit-license.org/1991-2016/
+ * Based on https://github.com/ddab-archive/8queens
  *
- * $Rev: 66 $
- * $Date: 2016-02-14 02:15:25 +0000 (Sun, 14 Feb 2016) $
+ * Home for updates
+ * https://github.com/jimmckeeth/Delphi-8-Queens
  *
- * Performs calculations required to solve the 8 queens problem and to report
- * results.
+ * Performs calculations required to solve the
+ *   8 queens problem and to report results.
 }
-
 
 unit UCalc;
 
-
 interface
-
 
 type
   ///  <summary>Range of co-ordinate values of chess board squares.</summary>

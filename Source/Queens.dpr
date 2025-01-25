@@ -12,8 +12,6 @@
 
 program Queens;
 
-
-
 uses
   Forms,
   FmMain in 'FmMain.pas' {QueensForm},
@@ -21,8 +19,7 @@ uses
   UPlatform in 'UPlatform.pas',
   UChessBoardCmp in 'UChessBoardCmp.pas';
 
-{$RESOURCE VersionInfo.res}   // Contains version information
-{$RESOURCE Resource.res}      // All other resources including icon
+{$R 'Resource.res' 'Resource.rc'}
 
 begin
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;

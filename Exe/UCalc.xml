@@ -1,0 +1,681 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<namespace name="UCalc" platform="Win32">
+  <type name="TBoardCoord" type="shortint" loBound="1" hiBound="8" file="UCalc.pas" line="18">
+    <devnotes>
+        <summary>Range of co-ordinate values of chess board squares.</summary>
+    </devnotes>
+  </type>
+  <type name="TColCoord" type="shortint" loBound="1" hiBound="8" file="UCalc.pas" line="22">
+    <devnotes>
+        <summary>Range of co-ordinate values of chess board columns.</summary>
+    </devnotes>
+  </type>
+  <type name="TRowCoord" type="shortint" loBound="1" hiBound="8" file="UCalc.pas" line="26">
+    <devnotes>
+        <summary>Range of co-ordinate values of chess board rows.</summary>
+    </devnotes>
+  </type>
+  <type name="TDiagonal" type="shortint" loBound="-7" hiBound="7" file="UCalc.pas" line="30">
+    <devnotes>
+        <summary>Ranges of indexes of chess board diagonals.</summary>
+    </devnotes>
+  </type>
+  <struct name="TSquare" size="2" file="UCalc.pas" line="34">
+    <devnotes>
+        <summary>Provides information about a chessboard square.</summary>
+    </devnotes>
+    <field name="fCol" type="TColCoord" visibility="class private" size="1" offset="0" file="UCalc.pas" line="38">
+      <devnotes>
+          <summary>Value of Col property.</summary>
+      </devnotes>
+    </field>
+    <field name="fRow" type="TRowCoord" visibility="class private" size="1" offset="1" file="UCalc.pas" line="40">
+      <devnotes>
+          <summary>Value of Row property.</summary>
+      </devnotes>
+    </field>
+    <constructor name="Create" visibility="public" file="UCalc.pas" line="44">
+      <devnotes>
+          <summary>Constructs an initialised record representing the square at
+          the given column and row.</summary>
+      </devnotes>
+      <parameters>
+        <parameter name="ACol" type="TColCoord" />
+        <parameter name="ARow" type="TRowCoord" />
+      </parameters>
+    </constructor>
+    <property name="Col" visibility="public" read="fCol" type="TColCoord" file="UCalc.pas" line="46">
+      <devnotes>
+          <summary>Column containing square on chessboard.</summary>
+      </devnotes>
+    </property>
+    <property name="Row" visibility="public" read="fRow" type="TRowCoord" file="UCalc.pas" line="48">
+      <devnotes>
+          <summary>Row containing square on chessboard.</summary>
+      </devnotes>
+    </property>
+    <function name="UpDiagonal" visibility="public" file="UCalc.pas" line="50">
+      <devnotes>
+          <summary>Up diagonal containing square on chessboard.</summary>
+      </devnotes>
+      <parameters>
+        <retval type="TDiagonal">
+          <devnotes>
+              <summary>Ranges of indexes of chess board diagonals.</summary>
+          </devnotes>
+        </retval>
+      </parameters>
+    </function>
+    <function name="DownDiagonal" visibility="public" file="UCalc.pas" line="52">
+      <devnotes>
+          <summary>Down diagonal containing square on chessboard.</summary>
+      </devnotes>
+      <parameters>
+        <retval type="TDiagonal">
+          <devnotes>
+              <summary>Ranges of indexes of chess board diagonals.</summary>
+          </devnotes>
+        </retval>
+      </parameters>
+    </function>
+  </struct>
+  <struct name="TOccupancy" size="38" file="UCalc.pas" line="60">
+    <devnotes>
+        <summary>Records which rows and diagonals are occupied by queens.
+        </summary>
+        <remarks>Requires that only one queen will ever occupy the same row or
+        diagonal.</remarks>
+    </devnotes>
+    <field name="fRows" visibility="class private" size="8" offset="0" file="UCalc.pas" line="64">
+      <devnotes>
+          <summary>Array of flags recording occupied rows.</summary>
+      </devnotes>
+      <array name="fRows" visibility="class private" low="1" high="8" file="UCalc.pas" line="64">
+        <element type="Boolean" />
+      </array>
+    </field>
+    <field name="fUpDiags" visibility="class private" size="15" offset="8" file="UCalc.pas" line="66">
+      <devnotes>
+          <summary>Array of flags recording occupied up diagonals.</summary>
+      </devnotes>
+      <array name="fUpDiags" visibility="class private" low="-7" high="7" file="UCalc.pas" line="66">
+        <element type="Boolean" />
+      </array>
+    </field>
+    <field name="fDownDiags" visibility="class private" size="15" offset="23" file="UCalc.pas" line="68">
+      <devnotes>
+          <summary>Array of flags recording occupied down diagonals.</summary>
+      </devnotes>
+      <array name="fDownDiags" visibility="class private" low="-7" high="7" file="UCalc.pas" line="68">
+        <element type="Boolean" />
+      </array>
+    </field>
+    <procedure name="SetOccupancy" visibility="class private" procflags="inline" file="UCalc.pas" line="71">
+      <devnotes>
+          <summary>Sets or clears occupancy flags for the row and diagonals of
+          given square to value of given flag.</summary>
+      </devnotes>
+      <parameters>
+        <parameter name="Square" type="TSquare" paramflags="const" />
+        <parameter name="Flag" type="Boolean" />
+      </parameters>
+    </procedure>
+    <procedure name="Clear" visibility="public" file="UCalc.pas" line="75">
+      <devnotes>
+          <summary>Clears all row and diagonal occupancy flags.</summary>
+          <remarks>Chess board must be empty after Clear is called.</remarks>
+      </devnotes>
+    </procedure>
+    <function name="CanOccupy" visibility="public" file="UCalc.pas" line="80">
+      <devnotes>
+          <summary>Checks if a queen can occupy given chessboard square.
+          </summary>
+          <remarks>For this to happen its row and both its diagonals must be
+          unoccupied.</remarks>
+      </devnotes>
+      <parameters>
+        <parameter name="Square" type="TSquare" paramflags="const" />
+        <retval type="Boolean" />
+      </parameters>
+    </function>
+    <procedure name="Occupy" visibility="public" file="UCalc.pas" line="82">
+      <devnotes>
+          <summary>Marks given square's rows and diagonals as occupied.</summary>
+      </devnotes>
+      <parameters>
+        <parameter name="Square" type="TSquare" paramflags="const" />
+      </parameters>
+    </procedure>
+    <procedure name="Vacate" visibility="public" file="UCalc.pas" line="85">
+      <devnotes>
+          <summary>Marks given square's rows and diagonals as unoccupied.
+          </summary>
+      </devnotes>
+      <parameters>
+        <parameter name="Square" type="TSquare" paramflags="const" />
+      </parameters>
+    </procedure>
+  </struct>
+  <struct name="TQueen" size="3" file="UCalc.pas" line="90">
+    <devnotes>
+        <summary>Records location on chessboard, if any, of a queen.</summary>
+    </devnotes>
+    <field name="fIsOnBoard" type="Boolean" visibility="class private" size="1" offset="0" file="UCalc.pas" line="94">
+      <devnotes>
+          <summary>Value of IsOnBoard property.</summary>
+      </devnotes>
+    </field>
+    <field name="fSquare" type="TSquare" visibility="class private" size="2" offset="1" file="UCalc.pas" line="96">
+      <devnotes>
+          <summary>Value of Square property.</summary>
+      </devnotes>
+    </field>
+    <function name="GetSquare" visibility="class private" file="UCalc.pas" line="99">
+      <devnotes>
+          <summary>Read accessor for Square property.</summary>
+          <remarks>Enforces that queen is on chessboard.</remarks>
+      </devnotes>
+      <parameters>
+        <retval type="TSquare">
+          <devnotes>
+              <summary>Provides information about a chessboard square.</summary>
+          </devnotes>
+        </retval>
+      </parameters>
+    </function>
+    <property name="IsOnBoard" visibility="public" read="fIsOnBoard" type="Boolean" file="UCalc.pas" line="103">
+      <devnotes>
+          <summary>Indicates if the queen has been placed on the chessboard.
+          </summary>
+      </devnotes>
+    </property>
+    <property name="Square" visibility="public" read="GetSquare" type="TSquare" file="UCalc.pas" line="106">
+      <devnotes>
+          <summary>Chessboard square occupied by queen.</summary>
+          <remarks>Must not be read if IsOnBoard is False.</remarks>
+      </devnotes>
+    </property>
+    <procedure name="Remove" visibility="public" file="UCalc.pas" line="109">
+      <devnotes>
+          <summary>Removes queen from chessboard.</summary>
+          <remarks>Must only be called if queen is on the board.</remarks>
+      </devnotes>
+    </procedure>
+    <procedure name="Place" visibility="public" file="UCalc.pas" line="112">
+      <devnotes>
+          <summary>Places queen on the given chessboard square.</summary>
+          <remarks>Must only be called if queen in not on the board.</remarks>
+      </devnotes>
+      <parameters>
+        <parameter name="Square" type="TSquare" paramflags="const" />
+      </parameters>
+    </procedure>
+    <procedure name="Clear" visibility="public" file="UCalc.pas" line="116">
+      <devnotes>
+          <summary>Ensures that queen is removed from board.</summary>
+          <remarks>Can be called regardless of whether queen is on the board
+          already.</remarks>
+      </devnotes>
+    </procedure>
+  </struct>
+  <struct name="TChessBoard" size="62" file="UCalc.pas" line="121">
+    <devnotes>
+        <summary>Records state of chessboard.</summary>
+    </devnotes>
+    <field name="fQueens" visibility="class private" size="24" offset="0" file="UCalc.pas" line="128">
+      <devnotes>
+          <summary>Records state of queens that can be placed on the columns of
+          the chessboard.</summary>
+          <remarks>One queen is associated with each chessboard column and is
+          either on one of its rows or off the board.</remarks>
+      </devnotes>
+      <array name="fQueens" visibility="class private" low="1" high="8" file="UCalc.pas" line="128">
+        <element type="TQueen" />
+      </array>
+    </field>
+    <field name="fOccupancy" type="TOccupancy" visibility="class private" size="38" offset="24" file="UCalc.pas" line="133">
+      <devnotes>
+          <summary>Records which rows and diagonals of the chessboard are
+          occupied by a queen.</summary>
+          <remarks>A row or diagonal is &quot;occupied&quot; a queen is placed on a
+          square on the row or diagonal.</remarks>
+      </devnotes>
+    </field>
+    <const name="FirstColumn" visibility="public" type="Integer" file="UCalc.pas" line="137">
+      <devnotes>
+          <summary>Coordinate of first column of chessboard.</summary>
+      </devnotes>
+      <value>
+        $1
+      </value>
+    </const>
+    <const name="LastColumn" visibility="public" type="Integer" file="UCalc.pas" line="139">
+      <devnotes>
+          <summary>Coordinate of last column of chessboard.</summary>
+      </devnotes>
+      <value>
+        $8
+      </value>
+    </const>
+    <const name="FirstRow" visibility="public" type="Integer" file="UCalc.pas" line="141">
+      <devnotes>
+          <summary>Coordinate of first row of chessboard.</summary>
+      </devnotes>
+      <value>
+        $1
+      </value>
+    </const>
+    <const name="LastRow" visibility="public" type="Integer" file="UCalc.pas" line="143">
+      <devnotes>
+          <summary>Coordinate of last row of chessboard.</summary>
+      </devnotes>
+      <value>
+        $8
+      </value>
+    </const>
+    <const name="SquareCount" visibility="public" type="Integer" file="UCalc.pas" line="145">
+      <devnotes>
+          <summary>Total number of squares on chessboard.</summary>
+      </devnotes>
+      <value>
+        $40
+      </value>
+    </const>
+    <procedure name="Clear" visibility="public" file="UCalc.pas" line="149">
+      <devnotes>
+          <summary>Clears all queens from chessboard.</summary>
+      </devnotes>
+    </procedure>
+    <function name="IsQueenOnBoard" visibility="public" file="UCalc.pas" line="152">
+      <devnotes>
+          <summary>Checks if queen associated with a chessboard column is placed
+          on the board.</summary>
+      </devnotes>
+      <parameters>
+        <parameter name="Col" type="TColCoord" paramflags="const" />
+        <retval type="Boolean" />
+      </parameters>
+    </function>
+    <procedure name="RemoveQueen" visibility="public" file="UCalc.pas" line="154">
+      <devnotes>
+          <summary>Removes the queen from the given chessboard column.</summary>
+      </devnotes>
+      <parameters>
+        <parameter name="Col" type="TColCoord" paramflags="const" />
+      </parameters>
+    </procedure>
+    <procedure name="PlaceQueen" visibility="public" file="UCalc.pas" line="156">
+      <devnotes>
+          <summary>Places a queen on the given chessboard square.</summary>
+      </devnotes>
+      <parameters>
+        <parameter name="Square" type="TSquare" paramflags="const" />
+      </parameters>
+    </procedure>
+    <function name="ContainsQueen" visibility="public" file="UCalc.pas" line="159">
+      <devnotes>
+          <summary>Checks if the square at coordinates (Col, Row) contains a
+          queen.</summary>
+      </devnotes>
+      <parameters>
+        <parameter name="Col" type="TColCoord" />
+        <parameter name="Row" type="TRowCoord" />
+        <retval type="Boolean" />
+      </parameters>
+    </function>
+    <function name="GetQueenSquare" visibility="public" file="UCalc.pas" line="163">
+      <devnotes>
+          <summary>Gets the square containing the queen in the given column.
+          </summary>
+          <remarks>There must be a queen on the given column.</remarks>
+      </devnotes>
+      <parameters>
+        <parameter name="Col" type="TColCoord" />
+        <retval type="TSquare">
+          <devnotes>
+              <summary>Provides information about a chessboard square.</summary>
+          </devnotes>
+        </retval>
+      </parameters>
+    </function>
+    <function name="CanOccupy" visibility="public" file="UCalc.pas" line="166">
+      <devnotes>
+          <summary>Checks if the given square can be occupied by a queen.
+          </summary>
+      </devnotes>
+      <parameters>
+        <parameter name="Square" type="TSquare" paramflags="const" />
+        <retval type="Boolean" />
+      </parameters>
+    </function>
+  </struct>
+  <const name="siUpDiag" type="TSquareInfluence" file="UCalc.pas" line="174">
+    <value>
+      siUpDiag
+    </value>
+  </const>
+  <const name="siDownDiag" type="TSquareInfluence" file="UCalc.pas" line="174">
+    <value>
+      siDownDiag
+    </value>
+  </const>
+  <const name="siColumn" type="TSquareInfluence" file="UCalc.pas" line="174">
+    <value>
+      siColumn
+    </value>
+  </const>
+  <const name="siRow" type="TSquareInfluence" file="UCalc.pas" line="174">
+    <value>
+      siRow
+    </value>
+  </const>
+  <enum name="TSquareInfluence" file="UCalc.pas" line="174">
+    <devnotes>
+        <summary>Enumerates the different directions in which a square can be
+        influenced by a queen.</summary>
+        <remarks>To be &quot;influenced&quot; by a queen a square has to share a row,
+        column or diagonal with it.</remarks>
+    </devnotes>
+    <element value="0" name="siUpDiag" file="UCalc.pas" line="174" />
+    <element value="1" name="siDownDiag" file="UCalc.pas" line="174" />
+    <element value="2" name="siColumn" file="UCalc.pas" line="174" />
+    <element value="3" name="siRow" file="UCalc.pas" line="174" />
+  </enum>
+  <set name="TSquareInfluences" type="TSquareInfluence" file="UCalc.pas" line="179">
+    <devnotes>
+        <summary>Set of directions in which a square can be influenced by a
+        queen.</summary>
+    </devnotes>
+    <element name="siUpDiag" />
+    <element name="siDownDiag" />
+    <element name="siColumn" />
+    <element name="siRow" />
+  </set>
+  <struct name="TInfluencedSquare" size="3" file="UCalc.pas" line="184">
+    <devnotes>
+        <summary>Associates a square with the set of directions it is influenced
+        by a queen.</summary>
+    </devnotes>
+    <field name="Square" type="TSquare" visibility="public" size="2" offset="0" file="UCalc.pas" line="186">
+      <devnotes>
+          <summary>The square.</summary>
+      </devnotes>
+    </field>
+    <field name="Influences" type="TSquareInfluences" visibility="public" size="1" offset="2" file="UCalc.pas" line="190">
+      <devnotes>
+          <summary>Set of influences.</summary>
+          <remarks>If set to [] then the square is not influenced by any queen.
+          </remarks>
+      </devnotes>
+    </field>
+    <constructor name="Create" visibility="public" file="UCalc.pas" line="193">
+      <devnotes>
+          <summary>Constructs a record for the given square, with no influences.
+          </summary>
+      </devnotes>
+      <parameters>
+        <parameter name="ASquare" type="TSquare" paramflags="const" />
+      </parameters>
+    </constructor>
+  </struct>
+  <struct name="TEngineState" size="4" file="UCalc.pas" line="200">
+    <devnotes>
+        <summary>Encapsulates the state of solution engine.</summary>
+        <remarks>Used for passing the state to using code to enable it to update
+        its output.</remarks>
+    </devnotes>
+    <field name="fQueens" type="TArray&lt;UCalc.TSquare&gt;" visibility="class private" size="4" offset="0" file="UCalc.pas" line="204">
+      <devnotes>
+          <summary>Array of squares currently containing queens.</summary>
+      </devnotes>
+    </field>
+    <constructor name="Create" visibility="public" file="UCalc.pas" line="208">
+      <devnotes>
+          <summary>Constructs a record representing the given array of squares
+          containing queens.</summary>
+      </devnotes>
+      <parameters>
+        <parameter name="Queens" type="TArray&lt;UCalc.TSquare&gt;" paramflags="const" />
+      </parameters>
+    </constructor>
+    <function name="Queens" visibility="public" file="UCalc.pas" line="213">
+      <devnotes>
+          <summary>Returns an array of squares that currently contain queens.
+          </summary>
+          <remarks>This is the array that was passed to the constructor.
+          </remarks>
+      </devnotes>
+      <parameters>
+        <retval type="TArray&lt;UCalc.TSquare&gt;" />
+      </parameters>
+    </function>
+    <function name="InfluencedSquares" visibility="public" file="UCalc.pas" line="216">
+      <devnotes>
+          <summary>Returns an array of all squares that are currently influenced
+          by one or more queens.</summary>
+      </devnotes>
+      <parameters>
+        <parameter name="ACol" type="TColCoord" />
+        <parameter name="ARow" type="TRowCoord" />
+        <retval type="TArray&lt;UCalc.TInfluencedSquare&gt;" />
+      </parameters>
+    </function>
+  </struct>
+  <class name="TEngine" file="UCalc.pas" line="222">
+    <devnotes>
+        <summary>8 queen problem solution engine.</summary>
+    </devnotes>
+    <ancestor name="TObject" namespace="System">
+      <methodref name="Create" visibility="public" procflags="constructor">
+      </methodref>
+      <methodref name="Free" visibility="public">
+      </methodref>
+      <methodref name="DisposeOf" visibility="public" procflags="inline" symflags="deprecated">
+      </methodref>
+      <methodref name="InitInstance" visibility="public" procflags="class">
+      </methodref>
+      <methodref name="CleanupInstance" visibility="public">
+      </methodref>
+      <methodref name="ClassType" visibility="public" procflags="inline">
+      </methodref>
+      <methodref name="ClassName" visibility="public" procflags="class">
+      </methodref>
+      <methodref name="ClassNameIs" visibility="public" procflags="class">
+      </methodref>
+      <methodref name="ClassParent" visibility="public" procflags="class inline">
+      </methodref>
+      <methodref name="ClassInfo" visibility="public" procflags="class inline">
+      </methodref>
+      <methodref name="InstanceSize" visibility="public" procflags="class inline">
+      </methodref>
+      <methodref name="InheritsFrom" visibility="public" procflags="class">
+      </methodref>
+      <methodref name="MethodAddress" visibility="public" procflags="class overload">
+      </methodref>
+      <methodref name="MethodAddress" visibility="public" procflags="class overload">
+      </methodref>
+      <methodref name="MethodName" visibility="public" procflags="class">
+      </methodref>
+      <methodref name="QualifiedClassName" visibility="public" procflags="class">
+      </methodref>
+      <methodref name="FieldAddress" visibility="public" procflags="overload">
+      </methodref>
+      <methodref name="FieldAddress" visibility="public" procflags="overload">
+      </methodref>
+      <methodref name="GetInterface" visibility="public">
+      </methodref>
+      <methodref name="GetInterfaceEntry" visibility="public" procflags="class">
+      </methodref>
+      <methodref name="GetInterfaceTable" visibility="public" procflags="class inline">
+      </methodref>
+      <methodref name="UnitName" visibility="public" procflags="class">
+      </methodref>
+      <methodref name="UnitScope" visibility="public" procflags="class">
+      </methodref>
+      <methodref name="Equals" visibility="public" procflags="virtual">
+      </methodref>
+      <methodref name="GetHashCode" visibility="public" procflags="virtual">
+      </methodref>
+      <methodref name="ToString" visibility="public" procflags="virtual">
+      </methodref>
+      <methodref name="SafeCallException" visibility="public" procflags="virtual">
+      </methodref>
+      <methodref name="AfterConstruction" visibility="public" procflags="virtual">
+      </methodref>
+      <methodref name="BeforeDestruction" visibility="public" procflags="virtual">
+      </methodref>
+      <methodref name="Dispatch" visibility="public" procflags="virtual">
+      </methodref>
+      <methodref name="DefaultHandler" visibility="public" procflags="virtual">
+      </methodref>
+      <methodref name="NewInstance" visibility="public" procflags="class virtual">
+      </methodref>
+      <methodref name="FreeInstance" visibility="public" procflags="virtual">
+      </methodref>
+      <methodref name="Destroy" visibility="public" procflags="destructor virtual">
+      </methodref>
+      <methodref name="GetDisposed" visibility="protected" procflags="inline">
+      </methodref>
+      <methodref name="CheckDisposed" visibility="protected" procflags="inline">
+      </methodref>
+      <propertyref name="Disposed" visibility="protected">
+      </propertyref>
+    </ancestor>
+    <members>
+      <enum name="TMode" visibility="class private" alias="UCalc.TMode" file="UCalc.pas" line="226">
+        <element value="0" name="emInitialized" file="UCalc.pas" line="227" />
+        <element value="1" name="emInProgress" file="UCalc.pas" line="228" />
+        <element value="2" name="emFinished" file="UCalc.pas" line="229" />
+      </enum>
+      <field name="fSolutionCount" type="Integer" visibility="class private" size="4" offset="4" file="UCalc.pas" line="234">
+        <devnotes>
+            <summary>Value of SolutionCount property.</summary>
+        </devnotes>
+      </field>
+      <field name="fMode" type="TEngine.TMode" visibility="class private" size="1" offset="8" file="UCalc.pas" line="236">
+        <devnotes>
+            <summary>Current mode of operation of the solution engine.</summary>
+        </devnotes>
+      </field>
+      <field name="fChessBoard" type="TChessBoard" visibility="class private" size="62" offset="9" file="UCalc.pas" line="239">
+        <devnotes>
+            <summary>Current state of the chessboard.</summary>
+            <remarks>Updated as queens are added and removed.</remarks>
+        </devnotes>
+      </field>
+      <function name="GetEngineState" visibility="class private" file="UCalc.pas" line="241">
+        <devnotes>
+            <summary>Read accessor for EngineState property.</summary>
+        </devnotes>
+        <parameters>
+          <retval type="TEngineState">
+            <devnotes>
+                <summary>Encapsulates the state of solution engine.</summary>
+                <remarks>Used for passing the state to using code to enable it to update
+                its output.</remarks>
+            </devnotes>
+          </retval>
+        </parameters>
+      </function>
+      <procedure name="RemoveQueen" visibility="class private" file="UCalc.pas" line="244">
+        <devnotes>
+            <summary>Removes queen from given chessboard column.</summary>
+            <remarks>Does nothing if queen is not on board.</remarks>
+        </devnotes>
+        <parameters>
+          <parameter name="Col" type="TColCoord" paramflags="const" />
+        </parameters>
+      </procedure>
+      <function name="PlaceQueen" visibility="class private" file="UCalc.pas" line="257">
+        <devnotes>
+            <summary>Attempts to place a queen at the next available row in a
+            column.</summary>
+            <param name="Col">TColCoord [in] Column in which to place queen.
+            </param>
+            <param name="StartRow">TRowCoord [in] Row at which to begin search for
+            square.</param>
+            <returns>Boolean. True if a queen was placed successfully, False if
+            not.</returns>
+            <remarks>We don't always start the search at the first row because a
+            queen may already have been placed in the column and removed. In these
+            cases the search starts in the row after the one where the queen was
+            originally placed.</remarks>
+        </devnotes>
+        <parameters>
+          <parameter name="Col" type="TColCoord" paramflags="const" />
+          <parameter name="StartRow" type="TRowCoord" />
+          <retval type="Boolean" />
+        </parameters>
+      </function>
+      <function name="FindQueenSquare" visibility="class private" file="UCalc.pas" line="268">
+        <devnotes>
+            <summary>Attempts to find a square where a queen may be placed in a
+            column.</summary>
+            <param name="Col">TColCoord [in] Column in which queen may be placed.
+            </param>
+            <param name="StartRow">TRowCoord [in] Row at which to begin search for
+            a square to place queen.</param>
+            <param name="Square">TSquare [out] Set to found square if one was
+            found. Undefined if no suitable square found.</param>
+            <returns>Boolean. True if a suitable square was found, False if not.
+            </returns>
+        </devnotes>
+        <parameters>
+          <parameter name="Col" type="TColCoord" paramflags="const" />
+          <parameter name="StartRow" type="TRowCoord" />
+          <parameter name="Square" type="TSquare" paramflags="out" />
+          <retval type="Boolean" />
+        </parameters>
+      </function>
+      <function name="FindNextSearchRow" visibility="class private" file="UCalc.pas" line="276">
+        <devnotes>
+            <summary>Finds next row on which to begin search for a queen in a
+            column.</summary>
+            <param name="Col">TColCoord [in] Column to be searched.</param>
+            <param name="StartRow">TRowCoord [out] Row on which search is to begin.
+            Not set if no suitable row is found.</param>
+            <returns>True if a search row is found, False if not.</returns>
+        </devnotes>
+        <parameters>
+          <parameter name="Col" type="TColCoord" />
+          <parameter name="StartRow" type="TRowCoord" paramflags="out" />
+          <retval type="Boolean" />
+        </parameters>
+      </function>
+      <constructor name="Create" visibility="public" file="UCalc.pas" line="280">
+        <devnotes>
+            <summary>Constructs object and initialises solution engine.</summary>
+        </devnotes>
+        <parameters>
+        </parameters>
+      </constructor>
+      <procedure name="Initialize" visibility="public" file="UCalc.pas" line="283">
+        <devnotes>
+            <summary>Initialises solution engine to its starting state.</summary>
+            <remarks>There are no queens on chessboard in starting state.</remarks>
+        </devnotes>
+      </procedure>
+      <function name="NextSolution" visibility="public" file="UCalc.pas" line="287">
+        <devnotes>
+            <summary>Finds next solution and updates chessboard accordingly.
+            </summary>
+            <returns>True if a solution is found, False if not.</returns>
+        </devnotes>
+        <parameters>
+          <retval type="Boolean" />
+        </parameters>
+      </function>
+      <property name="SolutionCount" visibility="public" read="fSolutionCount" type="Integer" file="UCalc.pas" line="289">
+        <devnotes>
+            <summary>Number of solutions found to date.</summary>
+        </devnotes>
+      </property>
+      <property name="EngineState" visibility="public" read="GetEngineState" type="TEngineState" file="UCalc.pas" line="292">
+        <devnotes>
+            <summary>Current state of solution engine, in form suitable for output
+            by using code.</summary>
+        </devnotes>
+      </property>
+    </members>
+  </class>
+</namespace>

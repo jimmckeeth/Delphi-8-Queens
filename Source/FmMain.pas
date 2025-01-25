@@ -1,10 +1,9 @@
 {
  * Distributed under the MIT license.
- * See the accompanying LICENSE file or go to
- * http://delphidabbler.mit-license.org/1991-2016/
+ * Based on https://github.com/ddab-archive/8queens
  *
- * $Rev: 66 $
- * $Date: 2016-02-14 02:15:25 +0000 (Sun, 14 Feb 2016) $
+ * Home for updates
+ * https://github.com/jimmckeeth/Delphi-8-Queens
  *
  * 8 Queens application's main form.
 }
@@ -18,9 +17,7 @@ interface
 
 uses
   // Delphi
-  ExtCtrls, ComCtrls, StdCtrls, Controls, Classes, Forms,
-  // DelphiDabbler library
-  PJVersionInfo, PJAbout, PJHotLabel,
+  ExtCtrls, ComCtrls, StdCtrls, Controls, Classes, Forms, Dialogs,
   // Project
   UCalc, UChessBoardCmp;
 
@@ -29,28 +26,19 @@ type
   ///  <summary>Application's main form. Handles main window UI and interacts
   ///  with problem solving engine, displaying results.</summary>
   TQueensForm = class(TForm)
-    btnAbout: TButton;
     btnAuto: TButton;
-    btnExit: TButton;
     btnNext: TButton;
     btnReset: TButton;
     bvlBoard: TBevel;
-    dlgAbout: TPJAboutBoxDlg;
-    hlblWebsite: TPJHotLabel;
     lblAutoSpeed: TLabel;
     lblAutoSpeedSel: TLabel;
     lblSolutions: TLabel;
     rePrompt: TRichEdit;
     tbAuto: TTrackBar;
     tiAuto: TTimer;
-    viMain: TPJVersionInfo;
-    ///  <summary>Responds to About button click. Displays About box.</summary>
-    procedure btnAboutClick(Sender: TObject);
     ///  <summary>Responds to Slideshow button click. Toggles slideshow on and
     ///  off.</summary>
     procedure btnAutoClick(Sender: TObject);
-    ///  <summary>Responds to Exit button click. Closes program.</summary>
-    procedure btnExitClick(Sender: TObject);
     ///  <summary>Responds to Next Solution button click. Displays next solution
     ///  or "finished" message.</summary>
     procedure btnNextClick(Sender: TObject);
@@ -187,11 +175,6 @@ begin
   fChessBoardCmp.HideInfluences;
 end;
 
-procedure TQueensForm.btnAboutClick(Sender: TObject);
-begin
-  dlgAbout.Execute;
-end;
-
 procedure TQueensForm.btnAutoClick(Sender: TObject);
 begin
   if fMode = cModeFinished then
@@ -200,11 +183,6 @@ begin
     SetMode(cModeAuto)    // start slideshow
   else
     SetMode(cModeManual); // stop slideshow
-end;
-
-procedure TQueensForm.btnExitClick(Sender: TObject);
-begin
-  Close;
 end;
 
 procedure TQueensForm.btnNextClick(Sender: TObject);
@@ -225,12 +203,12 @@ procedure TQueensForm.FormCreate(Sender: TObject);
 begin
   // Make use OSs default font
   SetDefaultFormFont(Self);
-  // adjust hot label to use system font for highlighting
-  hlblWebsite.HighlightFont.Name := hlblWebsite.Font.Name;
-  hlblWebsite.HighlightFont.Size := hlblWebsite.Font.Size;
-  // ensure hot label large enough and realign right
-  hlblWebsite.AutoSize := True;
-  hlblWebsite.Left := btnReset.Left + btnReset.Width - hlblWebsite.Width;
+//  // adjust hot label to use system font for highlighting
+//  hlblWebsite.HighlightFont.Name := hlblWebsite.Font.Name;
+//  hlblWebsite.HighlightFont.Size := hlblWebsite.Font.Size;
+//  // ensure hot label large enough and realign right
+//  hlblWebsite.AutoSize := True;
+//  hlblWebsite.Left := btnReset.Left + btnReset.Width - hlblWebsite.Width;
 
   // Window caption is application title
   Caption := Application.Title;

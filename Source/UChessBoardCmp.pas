@@ -1,10 +1,9 @@
 {
  * Distributed under the MIT license.
- * See the accompanying LICENSE file or go to
- * http://delphidabbler.mit-license.org/1991-2016/
+ * Based on https://github.com/ddab-archive/8queens
  *
- * $Rev: 66 $
- * $Date: 2016-02-14 02:15:25 +0000 (Sun, 14 Feb 2016) $
+ * Home for updates
+ * https://github.com/jimmckeeth/Delphi-8-Queens
  *
  * Custom component that displays chess board and its contents.
 }
@@ -21,6 +20,9 @@ uses
   Classes, Controls, Windows, Graphics,
   // Project
   UCalc;
+
+const
+  CSquareSize = 22;
 
 type
   ///  <summary>Range of permitted sizes of chessboard squares.</summary>
@@ -93,8 +95,7 @@ type
     ///  <summary>Size of a chessboard square in pixels.</summary>
     ///  <remarks>Setting this property changes the size of the control.
     ///  </remarks>
-    property SquareSize: TSquareSize read fSquareSize write SetSquareSize
-      default 22;
+    property SquareSize: TSquareSize read fSquareSize write SetSquareSize default CSquareSize;
   end;
 
 implementation
@@ -103,7 +104,6 @@ implementation
 uses
   // Delphi
   Types;
-
 
 { TChessBoardCmp }
 
@@ -117,7 +117,7 @@ begin
   inherited;
   fQueenBmp := TBitmap.Create;
   fQueenBmp.Handle := LoadBitmap(HInstance, 'QUEEN');
-  fSquareSize := 22;
+  fSquareSize := CSquareSize;
   Width := BoardSize;
   Height := BoardSize;
   DoubleBuffered := True;
